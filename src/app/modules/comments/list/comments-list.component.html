@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <div class="col-12">
+    <div class="row">
+      <h2>{{'comments.list.headText' | translate}}</h2>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="header grid-row">
+      <div class="header-column">{{ 'comments.list.table.id' | translate }}</div>
+      <div class="header-column">{{ 'comments.list.table.title' | translate }}</div>
+      <div class="header-column">{{ 'comments.list.table.text' | translate }}</div>
+      <div class="header-column tags">
+        <div>{{ 'comments.list.table.tags' | translate }}</div>
+        <div class="tags-select-box">
+          <select class="form-control" [(ngModel)]="tagToFilter">
+          <option [value]="''"></option>
+          <option *ngFor="let tag of uniqueTags" [value]="tag">{{tag}}</option>
+        </select>
+        </div>
+      </div>
+      <div class="header-column text-right">{{ 'comments.list.table.actions' | translate }}</div>
+    </div>
+
+    <div *ngFor="let item of comments | filterByProperty: tagToFilter: 'tags'">
+      <app-comments-list-item [comment]="item" [tags]="uniqueTags" (onCommentCRUD)="commentCRUD($event)"></app-comments-list-item>
+    </div>
+    <hr>
+
+    <h4>{{'comments.list.header.newComment' | translate}}</h4>
+    <app-comments-list-item (onCommentCRUD)="commentCRUD($event)" [tags]="uniqueTags" [isCreationLine]="true"></app-comments-list-item>
+
+  </div>
+
+</div>

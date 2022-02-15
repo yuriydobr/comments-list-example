@@ -1,0 +1,14 @@
+{
+  "comments.list.headText": "Comments",
+  "comments.list.table.id": "ID",
+  "comments.list.table.title": "Title",
+  "comments.list.table.text": "Text",
+  "comments.list.table.tags": "Tags",
+  "comments.list.table.actions": "Actions",
+  "comments.list.header.newComment": "New comment",
+  "comments.list-item.title.edit": "Edit",
+  "comments.list-item.title.delete": "Delete",
+  "comments.list-item.title.save": "Save",
+  "comments.list-item.title.cancel": "Cancel",
+  "comments.list-item.title.add": "Add"
+}

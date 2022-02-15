@@ -1,0 +1,34 @@
+<div class="list-item grid-row" *ngIf="!isEditable && !isCreationLine">
+  <div class="item-column">{{ comment.id }}</div>
+  <div class="item-column">{{ comment.title }}</div>
+  <div class="item-column" [innerHTML]="comment.text"></div>
+  <div class="item-column">
+    <span class="badge badge-info m-1" *ngFor="let tag of comment.tags">{{tag}}</span>
+  </div>
+  <div class="item-column text-right">
+    <i class="bi bi-pencil m-2" title="{{'comments.list-item.title.edit' | translate}}" (click)="startOrCancelEdit(true)"></i>
+    <i class="bi bi-trash3 m-2" title="{{'comments.list-item.title.delete' | translate}}" (click)="delete()"></i>
+  </div>
+</div>
+
+<form [formGroup]="editForm" class="list-item grid-row" *ngIf="isEditable || isCreationLine">
+  <div class="item-column">
+    <span *ngIf="!isCreationLine">{{ comment.id }}</span>
+  </div>
+  <div class="item-column">
+    <input type="text" class="form-control" formControlName="title"
+           [ngClass]="{'is-invalid': editForm.controls.title.touched && !!editForm.controls.title.errors}">
+  </div>
+  <div class="item-column">
+    <input type="text" class="form-control" formControlName="text"
+           [ngClass]="{'is-invalid': editForm.controls.text.touched && !!editForm.controls.text.errors}">
+  </div>
+  <div class="item-column">
+    <ng-select [items]="tags" [addTag]="true" [multiple]="true" formControlName="tags"></ng-select>
+  </div>
+  <div class="item-column text-right">
+    <i class="bi bi-check-lg m-2" *ngIf="!isCreationLine" title="{{'comments.list-item.title.save' | translate}}" (click)="save()"></i>
+    <i class="bi bi-x-lg m-2" *ngIf="!isCreationLine" title="{{'comments.list-item.title.cancel' | translate}}" (click)="startOrCancelEdit(false)"></i>
+    <i class="bi bi-plus-lg m-2" *ngIf="isCreationLine" title="{{'comments.list-item.title.add' | translate}}" (click)="add()"></i>
+  </div>
+</form>

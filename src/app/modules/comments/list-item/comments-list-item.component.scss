@@ -1,0 +1,41 @@
+@import '../../../shared/theme/color-schema';
+
+.list-item {
+  background-color: $background-color;
+  border-radius: 6px;
+  border: 1px solid $border-color;
+  color: $text-color;
+  font-size: 16px;
+  padding: 16px;
+  margin: 0 0 1px 0;
+  min-height: 80px;
+
+  .item-column {
+    padding: 0 16px;
+  }
+
+  &:hover {
+    box-shadow: 1px 1px 2px 2px rgb(0 0 0 / 20%);
+  }
+
+  i {
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .bi-pencil:hover, .bi-check-lg:hover, .bi-plus-lg:hover {
+    font-size: 22px;
+    color: $success-color;
+  }
+
+  .bi-trash3:hover, .bi-x-lg:hover {
+    font-size: 22px;
+    color: $error-color;
+  }
+
+  input.form-control.is-invalid {
+    border-color: $error-color;
+    color: $error-color;
+  }
+
+}

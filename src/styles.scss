@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'src/app/shared/theme/color-schema';
+
+.grid-row {
+  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+
+  > :first-child {
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+
+  > :nth-child(2) {
+    grid-column-start: 2;
+    grid-column-end: 7;
+  }
+
+  > :nth-child(3) {
+    grid-column-start: 7;
+    grid-column-end: 15;
+  }
+
+  > :nth-child(4) {
+    grid-column-start: 15;
+    grid-column-end: 22;
+  }
+
+  > :last-child {
+    grid-column-start: 22;
+    grid-column-end: 25;
+  }
+}
