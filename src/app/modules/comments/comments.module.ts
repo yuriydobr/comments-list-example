@@ -7,7 +7,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { SharedModule } from '../../shared/shared.module';
 import { CommentsRoutingModule } from './comments-routing.module';
 import { CommentsService } from './comments.service';
-import { CommentsResolver } from './comments.resolver';
 import { CommentsListComponent } from './list/comments-list.component';
 import { CommentsListItemComponent } from './list-item/comments-list-item.component';
 
@@ -27,8 +26,7 @@ import { CommentsListItemComponent } from './list-item/comments-list-item.compon
     CommentsListItemComponent
   ],
   providers: [
-    CommentsService,
-    CommentsResolver
+    CommentsService
   ]
 })
 

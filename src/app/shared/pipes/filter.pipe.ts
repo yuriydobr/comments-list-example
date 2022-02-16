@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 
 export class FilterPipe implements PipeTransform {
-  transform(items: any[], query: string, fieldName: string): any {
+  transform(items: null | any[], query: string, fieldName: string): any {
     return (!items || !query) ? items : items.filter((item) => item[fieldName].some((el: string) => el.toLowerCase() === query.toLowerCase()));
   }
 }

@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CommentItem } from './_models/comment-model';
 
 @Injectable()
 export class CommentsService {
-  public commentsList = new BehaviorSubject([] as CommentItem[]);
-  public commentsList$ = this.commentsList.asObservable();
+  private sourceURL = 'http://localhost:3000/comments';
 
   constructor(private httpClient: HttpClient) {
   }
 
   getList(): Observable<CommentItem[]> {
-    const source = '../../../assets/mocks/comments-list.json';
-    return this.httpClient.get(source) as Observable<CommentItem[]>;
+    return this.httpClient.get<CommentItem[]>(this.sourceURL);
   }
 
-  setCommentsList(list: CommentItem[]): void {
-    this.commentsList.next(list as CommentItem[]);
+  create(comment: CommentItem) {
+    return this.httpClient.post<CommentItem>(this.sourceURL, comment);
   }
 
+  update(id: number, comment: CommentItem): Observable<CommentItem> {
+    return this.httpClient.put<CommentItem>(this.sourceURL + '/' + id, comment);
+  }
+
+  delete(id: number) {
+    return this.httpClient.delete(this.sourceURL + '/' + id);
+  }
 }

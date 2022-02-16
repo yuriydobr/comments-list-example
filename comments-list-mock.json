@@ -1,0 +1,22 @@
+{
+  "comments": [
+    {
+      "id": 1,
+      "title": "Example with a link",
+      "text": "Here is a link to <a href='www.google.com'>Google</>",
+      "tags": ["google", "web", "search", "link"]
+    },
+    {
+      "id": 2,
+      "title": "Regular text example",
+      "text": "Here is some regular text without html tags.",
+      "tags": ["text", "web", "regular"]
+    },
+    {
+      "id": 3,
+      "title": "Example with html markup",
+      "text": "<h4>Some head text example</h4>\n<p>Some paragraph</p>",
+      "tags": ["html", "tags", "markup", "formatting"]
+    }
+  ]
+}

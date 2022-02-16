@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "dev-4201": "ng serve --port=4201"
+    "dev-4201": "ng serve --port=4201",
+    "server": "json-server --watch comments-list-mock.json --port 3000"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +25,7 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "bootstrap": "^4.6.1",
     "bootstrap-icons": "^1.7.2",
+    "json-server": "^0.17.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"

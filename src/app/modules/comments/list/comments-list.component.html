@@ -22,14 +22,16 @@
       <div class="header-column text-right">{{ 'comments.list.table.actions' | translate }}</div>
     </div>
 
-    <div *ngFor="let item of comments | filterByProperty: tagToFilter: 'tags'">
-      <app-comments-list-item [comment]="item" [tags]="uniqueTags" (onCommentCRUD)="commentCRUD($event)"></app-comments-list-item>
+    <div *ngFor="let item of (comments$ | async) | filterByProperty: tagToFilter: 'tags'">
+      <app-comments-list-item [comment]="item" [tags]="uniqueTags"
+                              (onCommentEdit)="editItem($event)"
+                              (onCommentDelete)="deleteItem($event)"></app-comments-list-item>
     </div>
     <hr>
 
     <h4>{{'comments.list.header.newComment' | translate}}</h4>
-    <app-comments-list-item (onCommentCRUD)="commentCRUD($event)" [tags]="uniqueTags" [isCreationLine]="true"></app-comments-list-item>
-
+    <app-comments-list-item [tags]="uniqueTags" [isCreationLine]="true"
+                            (onCommentAdd)="addItem($event)"></app-comments-list-item>
   </div>
 
 </div>

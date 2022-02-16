@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { switchMap, tap} from 'rxjs/operators';
 import { CommentsService } from '../comments.service';
 import { CommentItem } from '../_models/comment-model';
 
@@ -11,68 +10,68 @@ import { CommentItem } from '../_models/comment-model';
   styleUrls: ['./comments-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommentsListComponent implements OnInit, OnDestroy {
-  comments!: CommentItem[];
+export class CommentsListComponent implements OnInit {
+  comments$!: Observable<CommentItem[]>;
+  currentId!: number;
   uniqueTags: string[] = [];
   tagToFilter: string = '';
 
-  destroy$ = new Subject();
-
-  constructor(private commentsService: CommentsService,
-              private cdr: ChangeDetectorRef,
-              private activatedRoute: ActivatedRoute) {
+  constructor(private commentsService: CommentsService) {
   }
 
   ngOnInit(): void {
-    this.commentsService.setCommentsList(this.activatedRoute.snapshot.data.initialList);
-
-    this.commentsService.commentsList$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
-        this.comments = data;
-        this.prepareTagsList();
-      });
-
+    this.comments$ = this.commentsService.getList().pipe(
+      tap((data => {
+        this.prepareTagsList(data);
+        this.setCurrentId(data);
+      }))
+    );
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
+  addItem(event: any) {
+    const payload = {...{id: this.currentId + 1}, ...event};
+    this.comments$ = this.commentsService.create(payload)
+      .pipe(
+        switchMap(() => this.commentsService.getList()),
+        tap(data => {
+          this.prepareTagsList(data);
+          this.setCurrentId(data);
+        })
+      );
   }
 
-  commentCRUD(event: any) {
-    let comments = [...this.comments];
-
-    switch (event.type) {
-      case 'edit':
-        const currentId = comments.findIndex((item) => item.id === event.data.id);
-        comments[currentId].title = event.data.title;
-        comments[currentId].text = event.data.text;
-        comments[currentId].tags = event.data.tags;
-        this.commentsService.setCommentsList(comments);
-        this.prepareTagsList();
-        return;
-
-      case 'add':
-        const id = (!!comments.length) ? comments[comments.length - 1].id + 1 : 1;
-        comments.push({id, ...event.data});
-        this.commentsService.setCommentsList(comments);
-        this.prepareTagsList();
-        return;
-
-      case 'delete':
-        comments = comments.filter((item: any) => item.id !== event.data.id);
-        this.commentsService.setCommentsList(comments);
-        this.prepareTagsList();
-        return;
-    }
+  editItem(event: any) {
+    this.comments$ = this.commentsService.update(event.id,  event)
+      .pipe(
+        switchMap(() => this.commentsService.getList()),
+        tap(data => {
+          this.prepareTagsList(data);
+          this.setCurrentId(data);
+        })
+      );
   }
 
-  private prepareTagsList() {
+  deleteItem(event: any) {
+    this.comments$ = this.commentsService.delete(event.id)
+      .pipe(
+        switchMap(() => this.commentsService.getList()),
+        tap(data => {
+          this.prepareTagsList(data);
+          this.setCurrentId(data);
+        })
+      );
+  }
+
+  private prepareTagsList(list: CommentItem[]) {
     let allTags: any[] = [];
-    this.comments.forEach((comment: any) => {
+    list.forEach((comment: any) => {
       allTags = [...allTags, ...comment.tags];
     });
     this.uniqueTags = [...new Set(allTags)];
+  }
+
+  private setCurrentId(list: CommentItem[]) {
+    this.currentId = list[list.length-1].id;
   }
 
 }

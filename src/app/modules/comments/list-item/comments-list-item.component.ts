@@ -12,7 +12,10 @@ export class CommentsListItemComponent implements OnInit {
   @Input() comment!: CommentItem;
   @Input() tags: string[] = [];
   @Input() isCreationLine = false;
-  @Output() onCommentCRUD = new EventEmitter();
+
+  @Output() onCommentEdit = new EventEmitter();
+  @Output() onCommentAdd = new EventEmitter();
+  @Output() onCommentDelete = new EventEmitter();
 
   editForm!: FormGroup;
   isEditable: boolean = false;
@@ -34,32 +37,22 @@ export class CommentsListItemComponent implements OnInit {
     this.isEditable = !this.isEditable;
   }
 
-  save() {
+  saveChanges() {
     this.editForm.markAllAsTouched();
     if (this.editForm.valid) {
-      this.onCommentCRUD.emit({
-        type: 'edit',
-        data: {id: this.comment.id, ...this.editForm.value}
-      });
+      this.onCommentEdit.emit({id: this.comment.id, ...this.editForm.value});
       this.isEditable = !this.isEditable;
     }
   }
 
-  delete() {
-    this.onCommentCRUD.emit({
-      type: 'delete',
-      data: {id: this.comment.id, ...this.editForm.value}
-    });
+  deleteItem() {
+    this.onCommentDelete.emit({id: this.comment.id, ...this.editForm.value});
   }
 
-  add() {
+  addItem() {
     this.editForm.markAllAsTouched();
     if (this.editForm.valid) {
-      this.onCommentCRUD.emit({
-        type: 'add',
-        data: this.editForm.value
-      });
-
+      this.onCommentAdd.emit(this.editForm.value);
       this.editForm.reset({
         title: '',
         text: '',
